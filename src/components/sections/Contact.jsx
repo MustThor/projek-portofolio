@@ -14,6 +14,8 @@ const Contact = () => {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle');
   const [statusMessage, setStatusMessage] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [lastSent, setLastSent] = useState(0);
 
   const validateForm = () => {
     const newErrors = {};
@@ -45,6 +47,25 @@ const Contact = () => {
 
     if (!validateForm()) return;
 
+    // Honeypot check — bots fill hidden fields
+    if (honeypot) {
+      setStatus('success');
+      setStatusMessage("Message sent successfully! I'll get back to you soon.");
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      return;
+    }
+
+    // Rate limiting — 60 seconds between sends
+    const now = Date.now();
+    const cooldown = 60000;
+    if (now - lastSent < cooldown) {
+      const remaining = Math.ceil((cooldown - (now - lastSent)) / 1000);
+      setStatus('error');
+      setStatusMessage(`Please wait ${remaining}s before sending another message.`);
+      setTimeout(() => { setStatus('idle'); setStatusMessage(''); }, 3000);
+      return;
+    }
+
     setStatus('loading');
     setStatusMessage('');
 
@@ -55,6 +76,7 @@ const Contact = () => {
         setStatus('success');
         setStatusMessage("Message sent successfully! I'll get back to you soon.");
         setFormData({ name: '', email: '', subject: '', message: '' });
+        setLastSent(Date.now());
       } else {
         setStatus('error');
         setStatusMessage('Failed to send message. Please try again or contact me directly.');
@@ -197,6 +219,18 @@ const Contact = () => {
               onSubmit={handleSubmit}
               className="gradient-border bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl"
             >
+              {/* Honeypot — hidden from users, bots will fill this */}
+              <div className="absolute opacity-0 -z-10" aria-hidden="true" tabIndex={-1}>
+                <input
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               {/* Name */}
               <div className="mb-5">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400 mb-2">
