@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Filter, X, ZoomIn } from 'lucide-react';
 import { projects } from '../../data/projects';
-import Card from '../ui/Card';
 
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -16,8 +15,13 @@ const Projects = () => {
 
   return (
     <>
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-800/50">
-      <div className="max-w-6xl mx-auto">
+    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="absolute inset-0 dot-grid opacity-40" />
+
+      {/* Section divider top */}
+      <div className="section-divider mb-20" />
+
+      <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -25,12 +29,16 @@ const Projects = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">
             Featured Projects
           </h2>
-          <div className="w-20 h-1 bg-primary-600 mx-auto rounded-full"></div>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+            Some of the projects I've built and designed
+          </p>
+          <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-purple-500 mx-auto rounded-full"></div>
         </motion.div>
 
+        {/* Category Filter */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -44,10 +52,10 @@ const Projects = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full font-medium transition-all ${
+              className={`px-5 py-2 rounded-full font-medium text-sm transition-all duration-300 ${
                 selectedCategory === category
-                  ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/30'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? 'bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-lg shadow-primary-500/25'
+                  : 'glass text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
               }`}
             >
               {category}
@@ -55,6 +63,7 @@ const Projects = () => {
           ))}
         </motion.div>
 
+        {/* Project Grid */}
         <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => (
@@ -64,13 +73,13 @@ const Projects = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3, delay: 0.1 * index }}
-                className="cursor-pointer"
+                className="group"
               >
-                <Card className="h-full flex flex-col">
+                <div className="gradient-border bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+                  {/* Image */}
                   <div
-                    className="aspect-video bg-gradient-to-br from-primary-100 to-primary-200 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center overflow-hidden relative group/img"
+                    className="aspect-video bg-gradient-to-br from-primary-100 to-primary-200 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center overflow-hidden relative"
                     onClick={() => project.image && setLightboxImage({ src: project.image, alt: project.title })}
                     style={{ cursor: project.image ? 'zoom-in' : 'default' }}
                   >
@@ -78,7 +87,7 @@ const Projects = () => {
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 group-hover/img:scale-105"
+                        className="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -91,44 +100,54 @@ const Projects = () => {
                     >
                       {project.title.charAt(0)}
                     </span>
-                    {project.image && (
-                      <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                        <ZoomIn className="text-white opacity-0 group-hover/img:opacity-100 transition-opacity duration-300" size={28} />
-                      </div>
-                    )}
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-4">
+                      {project.image && (
+                        <span className="text-white text-xs font-medium flex items-center gap-1.5 glass px-3 py-1.5 rounded-full">
+                          <ZoomIn size={14} />
+                          View Image
+                        </span>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Content */}
                   <div className="p-6 flex-grow flex flex-col">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="px-3 py-1 text-xs font-semibold bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400 rounded-full">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="px-3 py-1 text-xs font-semibold bg-gradient-to-r from-primary-500/10 to-purple-500/10 text-primary-600 dark:text-primary-400 rounded-full border border-primary-200/50 dark:border-primary-700/50">
                         {project.category}
                       </span>
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                       {project.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
+                    <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow text-sm leading-relaxed">
                       {project.description}
                     </p>
+
+                    {/* Tags */}
                     <div className="flex flex-wrap gap-2 mb-4">
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded"
+                          className="px-2.5 py-1 text-xs bg-gray-100 dark:bg-gray-700/60 text-gray-600 dark:text-gray-300 rounded-lg font-medium hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
+
+                    {/* Links */}
                     {(project.github !== '#' || project.demo !== '#') && (
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 pt-3 border-t border-gray-100 dark:border-gray-700/50">
                         {project.github !== '#' && (
                           <a
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                            className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                           >
-                            <Github size={18} />
+                            <Github size={16} />
                             Code
                           </a>
                         )}
@@ -137,16 +156,16 @@ const Projects = () => {
                             href={project.demo}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                            className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                           >
-                            <ExternalLink size={18} />
+                            <ExternalLink size={16} />
                             Live Demo
                           </a>
                         )}
                       </div>
                     )}
                   </div>
-                </Card>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>

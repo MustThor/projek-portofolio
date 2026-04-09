@@ -9,15 +9,22 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+    <footer className="relative bg-gray-50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300">
+      {/* Gradient top border */}
+      <div className="h-px bg-gradient-to-r from-transparent via-primary-500/40 to-transparent" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+          {/* Left */}
           <div className="text-center md:text-left">
-            <h3 className="text-lg font-semibold mb-2">Fathin Thariq Wiyono</h3>
-            <p className="text-sm">Full Stack Developer & UI/UX Designer</p>
+            <h3 className="text-lg font-bold gradient-text mb-1">Fathin Thariq Wiyono</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Full Stack Developer & UI/UX Designer
+            </p>
           </div>
 
-          <div className="flex space-x-6">
+          {/* Social icons */}
+          <div className="flex space-x-5">
             {socialLinks.map((social) => {
               const Icon = social.icon;
               return (
@@ -26,18 +33,21 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  className="social-glow p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-300"
                   aria-label={social.name}
                 >
-                  <Icon size={24} />
+                  <Icon size={20} />
                 </a>
               );
             })}
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-gray-300 dark:border-gray-700 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Fathin Thariq Wiyono. All rights reserved.</p>
+        {/* Divider + Copyright */}
+        <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700/50 text-center">
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            &copy; {new Date().getFullYear()} Fathin Thariq Wiyono. Built with React & Tailwind CSS.
+          </p>
         </div>
       </div>
     </footer>

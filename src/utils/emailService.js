@@ -14,9 +14,9 @@ export const sendEmail = async (formData) => {
       SERVICE_ID,
       TEMPLATE_ID,
       {
-        from_name: formData.name,
-        from_email: formData.email,
-        subject: formData.subject,
+        name: formData.name,
+        email: formData.email,
+        title: formData.subject,
         message: formData.message,
       },
       PUBLIC_KEY
