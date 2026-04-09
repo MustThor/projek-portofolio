@@ -3,6 +3,15 @@ import { motion } from 'framer-motion';
 import { ArrowDown, Github, Linkedin, Mail, X } from 'lucide-react';
 import Button from '../ui/Button';
 
+const techPills = [
+  { label: 'React', x: '-left-4 sm:left-4', y: 'top-[22%]', delay: 0 },
+  { label: 'Node.js', x: '-right-2 sm:right-6', y: 'top-[18%]', delay: 1.2 },
+  { label: 'Python', x: '-left-6 sm:left-0', y: 'bottom-[32%]', delay: 0.6 },
+  { label: 'Java', x: '-right-4 sm:right-2', y: 'bottom-[28%]', delay: 1.8 },
+  { label: 'TypeScript', x: '-left-2 sm:left-12', y: 'top-[48%]', delay: 2.4 },
+  { label: 'PostgreSQL', x: '-right-6 sm:right-10', y: 'top-[52%]', delay: 0.8 },
+];
+
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -48,42 +57,153 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16"
+      className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto text-center">
+      {/* === BACKGROUND LAYERS === */}
+
+      {/* Dot grid pattern */}
+      <div className="absolute inset-0 dot-grid" />
+
+      {/* Gradient Orb 1 — Blue/Purple */}
+      <motion.div
+        className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full opacity-30 dark:opacity-20 blur-3xl pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(99,102,241,0.6) 0%, rgba(59,130,246,0.3) 50%, transparent 70%)',
+        }}
+        animate={{
+          x: [0, 40, -20, 0],
+          y: [0, -30, 20, 0],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+
+      {/* Gradient Orb 2 — Cyan/Teal */}
+      <motion.div
+        className="absolute -bottom-32 -right-32 w-[450px] h-[450px] rounded-full opacity-25 dark:opacity-15 blur-3xl pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(6,182,212,0.5) 0%, rgba(20,184,166,0.25) 50%, transparent 70%)',
+        }}
+        animate={{
+          x: [0, -35, 25, 0],
+          y: [0, 25, -35, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+
+      {/* Small accent orb */}
+      <motion.div
+        className="absolute top-1/3 right-1/4 w-[200px] h-[200px] rounded-full opacity-20 dark:opacity-10 blur-2xl pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(168,85,247,0.5) 0%, transparent 70%)',
+        }}
+        animate={{
+          x: [0, 20, -20, 0],
+          y: [0, -20, 15, 0],
+          scale: [1, 1.1, 0.95, 1],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+
+      {/* === FLOATING TECH PILLS === */}
+      {techPills.map((pill) => (
+        <motion.div
+          key={pill.label}
+          className={`absolute ${pill.x} ${pill.y} hidden md:flex`}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: [0.4, 0.7, 0.4],
+            y: [0, -12, 0],
+            scale: 1,
+          }}
+          transition={{
+            opacity: { duration: 4, repeat: Infinity, delay: pill.delay },
+            y: { duration: 3 + pill.delay * 0.3, repeat: Infinity, ease: 'easeInOut' },
+            scale: { duration: 0.6, delay: 0.8 + pill.delay * 0.15 },
+          }}
+        >
+          <span className="glass px-3 py-1.5 rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 select-none">
+            {pill.label}
+          </span>
+        </motion.div>
+      ))}
+
+      {/* === MAIN CONTENT === */}
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+
+        {/* Status Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex justify-center mb-6"
+        >
+          <span className="glass inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-200">
+            <motion.span
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="inline-block w-2 h-2 rounded-full bg-emerald-500"
+            />
+            Available for Work
+          </span>
+        </motion.div>
+
+        {/* Name — Gradient Text */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6"
+          className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 gradient-text leading-tight"
         >
           Fathin Thariq Wiyono
         </motion.h1>
 
+        {/* Typing Effect */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 mb-8"
+          className="text-xl sm:text-2xl md:text-3xl font-semibold text-primary-600 dark:text-primary-400 mb-8"
         >
           {typedText}
           <motion.span
             animate={{ opacity: [1, 0, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
-            className="inline-block w-1 h-6 ml-1 bg-primary-600 dark:bg-primary-400 align-middle"
+            className="inline-block w-1 h-7 ml-1 bg-primary-600 dark:bg-primary-400 align-middle rounded-full"
           />
         </motion.p>
 
+        {/* Decorative Line */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.35 }}
+          className="w-24 h-0.5 mx-auto mb-8 bg-gradient-to-r from-transparent via-primary-500 to-transparent"
+        />
+
+        {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-lg text-gray-700 dark:text-gray-300 mb-12 max-w-2xl mx-auto"
+          className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-xl mx-auto leading-relaxed"
         >
-          Full Stack Developer with a strong foundation in UI/UX and software development, 
+          Full Stack Developer with a strong foundation in UI/UX and software development,
           committed to building scalable applications with clean code and intuitive user experiences.
         </motion.p>
 
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,48 +216,33 @@ const Hero = () => {
           </Button>
         </motion.div>
 
+        {/* Social Icons */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.6 }}
           className="flex justify-center gap-6 mb-12"
         >
-          <a
-            href="https://github.com/MustThor"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            aria-label="GitHub"
-          >
-            <Github size={28} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/fathin-thariq-wiyono-236433217/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            aria-label="LinkedIn"
-          >
-            <Linkedin size={28} />
-          </a>
-          <a
-            href="https://x.com/jmbngan_"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            aria-label="X"
-          >
-            <X size={28} />
-          </a>
-          <a
-            href="mailto:fathin.thariq09@gmail.com"
-            className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            aria-label="Email"
-          >
-            <Mail size={28} />
-          </a>
+          {[
+            { Icon: Github, href: 'https://github.com/MustThor', label: 'GitHub' },
+            { Icon: Linkedin, href: 'https://www.linkedin.com/in/fathin-thariq-wiyono-236433217/', label: 'LinkedIn' },
+            { Icon: X, href: 'https://x.com/jmbngan_', label: 'X' },
+            { Icon: Mail, href: 'mailto:fathin.thariq09@gmail.com', label: 'Email' },
+          ].map(({ Icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target={label !== 'Email' ? '_blank' : undefined}
+              rel={label !== 'Email' ? 'noopener noreferrer' : undefined}
+              className="social-glow text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+              aria-label={label}
+            >
+              <Icon size={26} />
+            </a>
+          ))}
         </motion.div>
 
+        {/* Scroll Arrow */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -146,14 +251,14 @@ const Hero = () => {
         >
           <button
             onClick={() => scrollToSection('#about')}
-            className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            className="text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             aria-label="Scroll down"
           >
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              <ArrowDown size={32} />
+              <ArrowDown size={28} />
             </motion.div>
           </button>
         </motion.div>
