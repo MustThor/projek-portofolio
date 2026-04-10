@@ -90,8 +90,8 @@ const Skills = () => {
                         {skill.name}
                       </span>
 
-                      {/* Mini progress bar */}
-                      <div className="w-12 h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden ml-1">
+                      {/* Mini progress bar (Desktop only) */}
+                      <div className="hidden sm:block w-12 h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden ml-1">
                         <motion.div
                           className="h-full rounded-full"
                           style={{
@@ -107,6 +107,18 @@ const Skills = () => {
                           transition={{ duration: 0.8, delay: 0.3 }}
                         />
                       </div>
+
+                      {/* Mobile level indicator dot */}
+                      <span
+                        className="sm:hidden ml-auto w-2 h-2 rounded-full"
+                        style={{
+                          background: skill.level >= 90
+                            ? 'linear-gradient(135deg, #22c55e, #16a34a)'
+                            : skill.level >= 75
+                            ? 'linear-gradient(135deg, #3b82f6, #6366f1)'
+                            : 'linear-gradient(135deg, #f59e0b, #f97316)',
+                        }}
+                      />
 
                       {/* Hover tooltip */}
                       <div className="absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg z-10">
