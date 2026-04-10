@@ -6,6 +6,7 @@ import { projects } from '../../data/projects';
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [lightboxImage, setLightboxImage] = useState(null);
+  const [showAllMobile, setShowAllMobile] = useState(false);
   const categories = ['All', ...Array.from(new Set(projects.map((p) => p.category)))];
 
   const filteredProjects =
@@ -51,7 +52,10 @@ const Projects = () => {
               key={category}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => {
+                setSelectedCategory(category);
+                setShowAllMobile(false);
+              }}
               className={`px-5 py-2 rounded-full font-medium text-sm transition-all duration-300 ${
                 selectedCategory === category
                   ? 'bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-lg shadow-primary-500/25'
@@ -74,7 +78,7 @@ const Projects = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3, delay: 0.1 * index }}
-                className="group"
+                className={`group ${!showAllMobile && index >= 3 ? 'hidden sm:block' : ''}`}
               >
                 <div className="gradient-border bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
                   {/* Image */}
@@ -170,6 +174,27 @@ const Projects = () => {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* Show More/Less Button (Mobile Only) */}
+        {filteredProjects.length > 3 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-10 text-center sm:hidden flex justify-center"
+          >
+            <button
+              onClick={() => {
+                setShowAllMobile(!showAllMobile);
+                if (showAllMobile) {
+                  document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="px-6 py-2.5 bg-white dark:bg-gray-800 rounded-full font-medium text-sm text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-900 shadow-sm hover:shadow-md transition-all hover:bg-primary-50 dark:hover:bg-primary-900/30"
+            >
+              {showAllMobile ? 'Show Less Projects' : 'Show More Projects'}
+            </button>
+          </motion.div>
+        )}
 
         {filteredProjects.length === 0 && (
           <motion.div
