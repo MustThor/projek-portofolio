@@ -36,8 +36,22 @@ const Navbar = () => {
 
   const scrollToSection = (href) => {
     setIsOpen(false);
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    
+    // Add a small delay to allow the mobile menu closing animation to start
+    // This prevents the scroll from being interrupted on certain mobile browsers
+    setTimeout(() => {
+      const element = document.querySelector(href);
+      if (element) {
+        const navHeight = 80; // approximate navbar height + breathing room
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - navHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 50);
   };
 
   return (
